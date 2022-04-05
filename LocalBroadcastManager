@@ -1,0 +1,35 @@
+LocalBroadcastManager 호출
+
+BroadcastReceiver broadcastReceiver = new BroadcastReceiver()
+{
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+        if (Objects.equals(intent.getAction(), "animation"))
+        {
+            int currentPosition = intent.getIntExtra("current_position", 0);
+            if (currentPosition == 0)
+            {
+                startAnimation();
+                setViewsVisible();
+            } else
+            {
+                setViewsInvisible();
+            }
+        }
+    }
+};
+
+@Override
+public void onResume()
+{
+    super.onResume();
+    LocalBroadcastManager.getInstance(mContext).registerReceiver(broadcastReceiver, new IntentFilter("animation"));
+}
+
+@Override
+public void onPause()
+{
+    super.onPause();
+    LocalBroadcastManager.getInstance(mContext).unregisterReceiver(broadcastReceiver);
+}
